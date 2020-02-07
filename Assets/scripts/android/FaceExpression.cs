@@ -53,6 +53,7 @@ public class FaceExpression: MonoBehaviour
         if (doFaceExpression && (cryTrigger||Input.GetKeyDown(KeyCode.Alpha1)))
         {
             //cry
+            ShowDanMu.CryExecuted = true;
             cryTrigger = false;
             ResetExpression();
             ResetCry();
@@ -63,6 +64,7 @@ public class FaceExpression: MonoBehaviour
         else if(doFaceExpression &&(laughTrigger || Input.GetKeyDown(KeyCode.Alpha2)))
         {
             //laugh
+            ShowDanMu.LaughExecuted = true;
             laughTrigger = false;
             ResetExpression();
             ResetLaugh();
@@ -73,6 +75,7 @@ public class FaceExpression: MonoBehaviour
         else if(doFaceExpression &&(funnyTrigger || Input.GetKeyDown(KeyCode.Alpha3)))
         {
             //funny face
+            ShowDanMu.FunnyExecuted = true;
             funnyTrigger = false;
             ResetExpression();
             ResetFunny();
@@ -81,6 +84,7 @@ public class FaceExpression: MonoBehaviour
         }
         else if(doFaceExpression && blinkTrigger)
         {
+            ShowDanMu.BlinkExecuted = true;
             blinkTrigger = false;
             ResetExpression();
             ResetBlink();

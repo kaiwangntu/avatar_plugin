@@ -115,6 +115,7 @@ public class FingerInputAction : MonoBehaviour
                 {
                     if (camRotate)
                     {
+                        ShowDanMu.CamRotateExecuted = true;
                         rotate = camParent.eulerAngles.y - oldRot.y;
                         if (camParent.eulerAngles.y > 180f) target = camParent.eulerAngles.y - 360f;
                         else target = camParent.eulerAngles.y;
