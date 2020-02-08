@@ -48,6 +48,20 @@ public class AndroidCallUnityLib : MonoBehaviour
         FaceExpression.funnyTrigger = true;
     }
 
+    public void AvatarBlinkEye(string flag)
+    {
+        FaceExpression.blinkTrigger = true;
+        int i = Random.Range(0, 2);
+        if (i == 0)
+        {
+            FaceExpression.blinkEyeRight = true;
+        }
+        else
+        {
+            FaceExpression.blinkEyeRight = false;
+        }
+    }
+
     public void StartTalking(string flag)
     {
         if (flag.Equals("true"))

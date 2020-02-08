@@ -78,7 +78,7 @@ public class ShowDanMu : MonoBehaviour
                 //if (CheckIfDanMuShouldShow(danmuIndex) && !danmuMove[danmuIndex])
                 if(!danmuMove[danmuIndex])
                 {
-                    speed[danmuIndex] = Random.Range(60f, 100f);
+                    speed[danmuIndex] = Random.Range(100f, 120f);
                     height[danmuIndex] = Random.Range(0, 10);
                     danmuMove[danmuIndex] = true;
                     showWaitTime = Random.Range(7f, 10f);
