@@ -8,13 +8,10 @@ public class FingerInputAction : MonoBehaviour
     public Transform avatar;
     public Transform avatarFlag;
 
-    Transform m_cam;
-    Vector3 oldRot;
     Vector2 originTapPos;
     float target;
     float angle;
-    float lerpAngle, rotate;
-    bool startRotate;
+    bool avatarStartRotate, camStartRotate;
     float rotSpeed = 20f;
     bool fingerMove, camRotate, expression, startWaitDoubleTap;
     bool laugh, cry;
@@ -24,9 +21,7 @@ public class FingerInputAction : MonoBehaviour
     float waitDoubleTapTime;
     // Start is called before the first frame update
     void Start()
-    {
-        m_cam = Camera.main.transform;
-        
+    {   
         Input.multiTouchEnabled = false;
     }
 
@@ -39,12 +34,11 @@ public class FingerInputAction : MonoBehaviour
             {
                 if (!startWaitDoubleTap)
                 {
-                    oldRot = camParent.eulerAngles;
                     originTapPos = Input.touches[0].position;
                     //startRotate = false;
-                    lerpAngle = 0f;
                     fingerMove = false;
                     expression = false;
+                    camStartRotate = false;
                     camRotate = false;
                     ray = Camera.main.ScreenPointToRay(Input.touches[0].position);
                 }
@@ -87,22 +81,19 @@ public class FingerInputAction : MonoBehaviour
                 if (!expression)
                 {
                     Vector3 rot = camParent.rotation.eulerAngles;
-                    if (rot.y > 360f - angleField || rot.y < angleField)
+                    if((rot.y>180f&&rot.y<=360f-angleField &&Input.touches[0].deltaPosition.x<0f)||(rot.y<180f&&rot.y>angleField&&Input.touches[0].deltaPosition.x>0f))
+                    {
+                        camStartRotate = false;
+                    }
+                    else
+                    {
+                        camStartRotate = true;
+                    }
+                    if (camStartRotate)
                     {
                         angle = Input.touches[0].deltaPosition.x * 2f * Time.deltaTime;
                         //m_cam.Translate(new Vector3(Mathf.Sin(angle) * radius, 0, -(m_cam.position.z-Mathf.Cos(angle)*radius)));
                         camParent.rotation = Quaternion.Euler(0, rot.y + angle, 0);
-                    }
-                    else
-                    {
-                        if (rot.y <= 360f - angleField && rot.y > 180f)
-                        {
-                            camParent.rotation = Quaternion.Euler(0, (360f - angleField + 0.01f), 0);
-                        }
-                        else if (rot.y >= angleField && rot.y < 180f)
-                        {
-                            camParent.rotation = Quaternion.Euler(0, angleField - 0.01f, 0);
-                        }
                     }
                     camRotate = true;
                 }
@@ -115,13 +106,12 @@ public class FingerInputAction : MonoBehaviour
                 {
                     if (camRotate)
                     {
-                        ShowDanMu.CamRotateExecuted = true;
-                        rotate = camParent.eulerAngles.y - oldRot.y;
+                        //ShowDanMu.CamRotateExecuted = true;
                         if (camParent.eulerAngles.y > 180f) target = camParent.eulerAngles.y - 360f;
                         else target = camParent.eulerAngles.y;
                         if (Mathf.Abs(camParent.eulerAngles.y - avatar.eulerAngles.y) > 0.1f)
                         {
-                            startRotate = true;
+                            avatarStartRotate = true;
                         }
                     }
                     else if (expression)
@@ -194,11 +184,11 @@ public class FingerInputAction : MonoBehaviour
             waitDoubleTapTime = 0f;
         }
 
-        if (startRotate)
+        if (avatarStartRotate)
         {
             if (target >= 0f)
             {
-                if (avatar.eulerAngles.y >= 360f - angleField)
+                if (avatar.eulerAngles.y >= 180f)
                 {
                     avatar.rotation = Quaternion.Euler(avatar.eulerAngles.x, avatar.eulerAngles.y + rotSpeed * Time.deltaTime, avatar.eulerAngles.z);
                 }
@@ -209,7 +199,7 @@ public class FingerInputAction : MonoBehaviour
                         avatar.rotation = Quaternion.Euler(avatar.eulerAngles.x, avatar.eulerAngles.y + rotSpeed * Time.deltaTime, avatar.eulerAngles.z);
                         if (avatar.eulerAngles.y >= angleField)
                         {
-                            startRotate = false;
+                            avatarStartRotate = false;
                         }
                     }
                     else
@@ -220,7 +210,7 @@ public class FingerInputAction : MonoBehaviour
             }
             else
             {
-                if (avatar.eulerAngles.y >= 0f && avatar.eulerAngles.y <= angleField)
+                if (avatar.eulerAngles.y >= 0f && avatar.eulerAngles.y <= 180f)
                 {
                     avatar.rotation = Quaternion.Euler(avatar.eulerAngles.x, avatar.eulerAngles.y - rotSpeed * Time.deltaTime, avatar.eulerAngles.z);
                 }
@@ -235,7 +225,7 @@ public class FingerInputAction : MonoBehaviour
                         avatar.rotation = Quaternion.Euler(avatar.eulerAngles.x, avatar.eulerAngles.y - rotSpeed * Time.deltaTime, avatar.eulerAngles.z);
                         if (avatar.eulerAngles.y <= 360f - angleField)
                         {
-                            startRotate = false;
+                            avatarStartRotate = false;
                         }
                     }
                 }

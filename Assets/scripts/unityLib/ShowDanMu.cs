@@ -78,7 +78,7 @@ public class ShowDanMu : MonoBehaviour
                 //if (CheckIfDanMuShouldShow(danmuIndex) && !danmuMove[danmuIndex])
                 if(!danmuMove[danmuIndex])
                 {
-                    speed[danmuIndex] = Random.Range(100f, 120f);
+                    speed[danmuIndex] = Random.Range(100f, 130f);
                     height[danmuIndex] = Random.Range(0, 10);
                     danmuMove[danmuIndex] = true;
                     showWaitTime = Random.Range(7f, 10f);
@@ -99,7 +99,7 @@ public class ShowDanMu : MonoBehaviour
         for(int i = 0; i < danmuMove.Length; i++) {
             if (danmuMove[i])
             {
-                danmu_text[i].anchoredPosition = new Vector2(danmu_text[i].anchoredPosition.x - speed[i] * Time.deltaTime, height[i]*-13);
+                danmu_text[i].anchoredPosition = new Vector2(danmu_text[i].anchoredPosition.x - speed[i] * Time.deltaTime, height[i]*-12);
                 if (danmu_text[i].anchoredPosition.x < -(Screen.width + danmu_text[i].sizeDelta.x))
                 {
                     danmuMove[i] = false;

@@ -13,7 +13,7 @@ public class HeadRoatorBone : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        jointObj_neck.eulerAngles = new Vector3(0.0f, 270.0f, 265.0f);
     }
 
     // Update is called once per frame
@@ -28,6 +28,6 @@ public class HeadRoatorBone : MonoBehaviour
         // -23.86f
         jointObj_head.localRotation = Quaternion.Euler((rot * multiplier_head) + new Vector3(headRotCorrection, 0, 0));
         // +32.928f
-        jointObj_neck.localRotation = Quaternion.Euler((rot * multiplier_neck) + new Vector3(neckRotCorrection, 0, 0));
+        jointObj_neck.localRotation = Quaternion.Euler((rot * multiplier_neck) + new Vector3(neckRotCorrection, 0, 0)); 
     }
 }
