@@ -74,6 +74,8 @@ public class UnityListener : AndroidJavaProxy
         audioClipList.Add(ac);
     }
 
+    //public void SendString
+
     public Dictionary<string, float> GetBlendshape_dict()
     {
         return blendshape_dict;

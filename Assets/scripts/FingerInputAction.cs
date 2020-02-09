@@ -151,6 +151,10 @@ public class FingerInputAction : MonoBehaviour
                                 FaceExpression.blinkEyeRight = false;
                                 FaceExpression.blinkTrigger = true;
                             }
+                            else if (hit.collider.gameObject.name.Equals("headArea"))
+                            {
+                                HeadRoatorBone.nodTrigger = true;
+                            }
                         }
                     }
                     else

@@ -62,6 +62,11 @@ public class AndroidCallUnityLib : MonoBehaviour
         FaceExpression.blinkTrigger = true;
     }
 
+    public void AvatarHeadNod(string flag)
+    {
+        HeadRoatorBone.nodTrigger = true;
+    }
+
     public void StartTalking(string flag)
     {
         if (flag.Equals("true"))
@@ -74,6 +79,11 @@ public class AndroidCallUnityLib : MonoBehaviour
             AvatarSpeaking.isAvatarSpeaking = false;
             unityListener.ClearAudioClipList();
         }
+    }
+
+    public void RollingMessage(string flag)
+    {
+
     }
 
     //public void ShowStatusBar()

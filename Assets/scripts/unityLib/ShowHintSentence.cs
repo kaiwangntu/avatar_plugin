@@ -8,8 +8,9 @@ public class ShowHintSentence : MonoBehaviour
     public Transform text3d;
     public RectTransform text2d;
 
-    string[] content_3d = new string[] { "易感人群\n传播途径\n口罩种类\n居家隔离","学生防控\n老年人防控\n办公室防控\n怀疑感染怎么办","疫情在线咨询\n确诊患者车次\n确诊患者小区" };
-    string[] content_2d = new string[] { "北京天气","美元汇率","联通股价","今天几号","今天是农历几号","现在几点了","静夜思的作者是谁","背诵静夜思","讲一个笑话","五加五等于几"};
+    string[] content_3d = new string[] { "易感人群\n传播途径\n口罩种类\n居家隔离","学生防控\n老年人防控\n办公室防控\n怀疑感染怎么办","疫情在线咨询\n确诊患者车次\n确诊患者小区",
+                                         "北京天气\n美元汇率\n联通股价","今天几号\n今天农历几号\n现在几点了","静夜思的作者\n背诵静夜思\n讲一个笑话\n五加五等于几"};
+    string[] content_2d = new string[] { };
 
     TextMesh t_3d;
     Text t_2d;
@@ -32,7 +33,7 @@ public class ShowHintSentence : MonoBehaviour
         alpha3d = color_3d.a;
 
         t_2d = text2d.GetComponent<Text>();
-        t_2d.text = "试着问我："+content_2d[contentIndex2d];
+        t_2d.text = content_2d[contentIndex2d];
         color_2d = t_2d.color;
         alpha2d = color_2d.a;
     }
@@ -112,7 +113,7 @@ public class ShowHintSentence : MonoBehaviour
                     {
                         contentIndex2d = 0;
                     }
-                    t_2d.text = "试着问我："+content_2d[contentIndex2d];
+                    t_2d.text = content_2d[contentIndex2d];
                 }
             }
             else
