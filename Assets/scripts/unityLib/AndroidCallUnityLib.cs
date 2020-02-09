@@ -16,7 +16,7 @@ public class AndroidCallUnityLib : MonoBehaviour
 
         unityListener = new UnityListener();
         androidActivity.Call("setUnityListener", unityListener);
-        ShowStatusBar();
+        //ShowStatusBar();
     }
 
     // Update is called once per frame
@@ -49,6 +49,19 @@ public class AndroidCallUnityLib : MonoBehaviour
         FaceExpression.funnyTrigger = true;
     }
 
+    public void AvatarBlinkEye(string flag) {
+        int i = Random.Range(0,2);
+        if (i == 0)
+        {
+            FaceExpression.blinkEyeRight = true;
+        }
+        else
+        {
+            FaceExpression.blinkEyeRight = false;
+        }
+        FaceExpression.blinkTrigger = true;
+    }
+
     public void StartTalking(string flag)
     {
         if (flag.Equals("true"))
@@ -63,15 +76,15 @@ public class AndroidCallUnityLib : MonoBehaviour
         }
     }
 
-    public void ShowStatusBar()
-    {
-        androidActivity.Call("runOnUiThread", new AndroidJavaRunnable(() =>
-        {
-            androidActivity.Call<AndroidJavaObject>("getWindow").Call("addFlags", 2048);// WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN
-        }));
+    //public void ShowStatusBar()
+    //{
+    //    androidActivity.Call("runOnUiThread", new AndroidJavaRunnable(() =>
+    //    {
+    //        androidActivity.Call<AndroidJavaObject>("getWindow").Call("clearFlags", 2048);// WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN
+    //    }));
 
-        //Debug.Log("show status bar");
-    }
+    //    //Debug.Log("show status bar");
+    //}
 
 }
 

@@ -25,7 +25,7 @@ public class AvatarSpeaking : MonoBehaviour
                     audioSource.clip = AndroidCallUnityLib.unityListener.GetAudioClip(audioClipCount);
                     audioSource.Play();
                     audioClipCount++;
-                    //Debug.Log("sfy set audioclip");
+                    //Debug.Log("sfy111 avatar speaking");
                 }
             }
         }
@@ -35,6 +35,7 @@ public class AvatarSpeaking : MonoBehaviour
             {
                 audioSource.clip = null;
                 audioSource.Stop();
+                //Debug.Log("sfy111 avatar shutup");
             }
         }
         action_unitylib.isSpeaking = audioSource.isPlaying;

@@ -230,7 +230,20 @@ public class FingerInputAction : MonoBehaviour
                     }
                 }
             }
-
+            if (target >= 0)
+            {
+                if (Mathf.Abs(avatar.eulerAngles.y - target) < 0.3f)
+                {
+                    avatarStartRotate = false;
+                }
+            }
+            else
+            {
+                if (Mathf.Abs(avatar.eulerAngles.y - 360f - target) < 0.3f)
+                {
+                    avatarStartRotate = false;
+                }
+            }
         }
     }
 }
