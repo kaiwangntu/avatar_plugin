@@ -10,6 +10,8 @@ public class UnityListener : AndroidJavaProxy
     private Dictionary<string, float> blendshape_dict;
     private Dictionary<string, Dictionary<string, float>> au_dict;
     private List<AudioClip> audioClipList = new List<AudioClip>();
+    private string captionContent = "";
+    private int captionType;
 
     public UnityListener() : base("com.unicom.unitylibinterface.UnitylibListener")
     {
@@ -74,7 +76,20 @@ public class UnityListener : AndroidJavaProxy
         audioClipList.Add(ac);
     }
 
-    //public void SendString
+    public void SendStringData(int requestCode, int resultCode, AndroidJavaObject data)
+    {
+        string[] strArray = data.Call<string[]>("getStringData");
+       // Debug.Log("unity sendStringData:"+resultCode+","+strArray[1]);
+
+        captionType = resultCode;
+        captionContent = "";
+        for(int i = 0; i < strArray.Length; i++)
+        {
+            captionContent += strArray[i];
+        }
+
+        ShowHintSentence.RefreshCaption = true;
+    }
 
     public Dictionary<string, float> GetBlendshape_dict()
     {
@@ -84,6 +99,16 @@ public class UnityListener : AndroidJavaProxy
     public Dictionary<string, Dictionary<string, float>> GetAU_dict()
     {
         return au_dict;
+    }
+
+    public int getCaptionType()
+    {
+        return captionType;
+    }
+
+    public string getCaptionContent()
+    {
+        return captionContent;
     }
 
     public List<AudioClip> getAudioClipList()

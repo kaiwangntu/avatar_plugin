@@ -18,6 +18,7 @@ public class ShowDanMu : MonoBehaviour
     private int[] height;
     private float[] speed;
     private bool isDanmuOpen = true;
+    private int characterWidth = 50;
 
     public static bool LaughExecuted, CryExecuted, FunnyExecuted, BlinkExecuted, CamRotateExecuted;
 
@@ -30,7 +31,7 @@ public class ShowDanMu : MonoBehaviour
             GameObject danmuObj = new GameObject("danmu", typeof(RectTransform));
             danmuObj.transform.SetParent(this.gameObject.transform);
             danmu_text[i] = danmuObj.GetComponent<RectTransform>();
-            danmu_text[i].sizeDelta = new Vector2(700, 100);
+            danmu_text[i].sizeDelta = new Vector2(content[i].Length * characterWidth, 100);
             danmu_text[i].pivot = new Vector2(0, 1);
             danmu_text[i].anchorMax = new Vector2(1, 1);
             danmu_text[i].anchorMin = new Vector2(1, 1);
@@ -100,11 +101,11 @@ public class ShowDanMu : MonoBehaviour
             if (danmuMove[i])
             {
                 danmu_text[i].anchoredPosition = new Vector2(danmu_text[i].anchoredPosition.x - speed[i] * Time.deltaTime, height[i]*-12);
-                if (danmu_text[i].anchoredPosition.x < -(Screen.width + danmu_text[i].sizeDelta.x))
+                if (danmu_text[i].anchoredPosition.x < -(Screen.width + 2 * danmu_text[i].sizeDelta.x))
                 {
                     danmuMove[i] = false;
                     danmu_text[i].anchoredPosition = new Vector2(0, 0);
-                    Debug.Log("reset");
+                    //Debug.Log("reset");
                     showWaitTime = Random.Range(4f, 5f);
                     currentWaitTime = 0f;
                 }

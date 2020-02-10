@@ -8,6 +8,8 @@ public class ShowHintSentence : MonoBehaviour
     public Transform text3d;
     public RectTransform text2d;
 
+    public static bool RefreshCaption;
+
     string[] content_3d = new string[] { "易感人群\n传播途径\n口罩种类","居家隔离\n怀疑感染\n疫情在线咨询","学生防控\n老年人防控\n办公室防控","确诊患者车次\n确诊患者小区\n北京天气",
                                          "美元汇率\n联通股价\n五加五等于几","今天几号\n今天农历几号\n现在几点了","静夜思的作者\n背诵静夜思\n讲一个笑话"};
     string[] content_2d = new string[] { };
@@ -19,7 +21,8 @@ public class ShowHintSentence : MonoBehaviour
 
     float showTime3d = 3f, showTime2d = 3f;
     float currentTime3d = 0f, currentTime2d = 0f;
-    float alpha3d, alpha2d, alphaSpeed3d = 2f, alphaSpeed2d = 3f;
+    float alpha3d, alpha2d, alphaSpeed3d = 2f, speed2d = 80f;
+    int characterWidth = 50;//当前字号38下，每个字占位为50
 
     bool isShow_3d=true, isShow_2d=true, turn2Trans_3d, turn2Trans_2d;
 
@@ -33,8 +36,8 @@ public class ShowHintSentence : MonoBehaviour
         alpha3d = color_3d.a;
 
         t_2d = text2d.GetComponent<Text>();
-        t_2d.text = content_2d[contentIndex2d];
-        color_2d = t_2d.color;
+        t_2d.text = "";
+        color_2d = t_2d.color;//#636363
         alpha2d = color_2d.a;
     }
 
@@ -43,6 +46,11 @@ public class ShowHintSentence : MonoBehaviour
     {
         Show3DText();
         Show2DText();
+        if (RefreshCaption)
+        {
+            RefreshCaption = false;
+            RefreshText2d();
+        }
     }
 
     void Show3DText()
@@ -89,43 +97,27 @@ public class ShowHintSentence : MonoBehaviour
 
     void Show2DText()
     {
-        if (currentTime2d > showTime2d)//展示时间达到，切换文字
+        text2d.anchoredPosition = new Vector2(text2d.anchoredPosition.x - speed2d * Time.deltaTime, text2d.anchoredPosition.y);
+        if (text2d.anchoredPosition.x < -(Screen.width + 2 * text2d.sizeDelta.x))
         {
-            isShow_2d = false;
-            turn2Trans_2d = true;
-            currentTime2d = 0f;
+            t_2d.text = "";
+            text2d.anchoredPosition = new Vector2(0, 0);
         }
-        if (isShow_2d)
+    }
+
+    void RefreshText2d()
+    {
+        string str = AndroidCallUnityLib.unityListener.getCaptionContent();
+        text2d.sizeDelta = new Vector2(characterWidth * str.Length, 50);
+        t_2d.text = str;
+        if (AndroidCallUnityLib.unityListener.getCaptionType() == 0)
         {
-            currentTime2d += Time.deltaTime;
+            t_2d.color = color_2d;
         }
         else
         {
-            if (turn2Trans_2d)
-            {
-                alpha2d -= alphaSpeed2d * Time.deltaTime;
-                t_2d.color = new Color(color_2d.r, color_2d.g, color_2d.b, alpha2d);
-                if (alpha2d <= 0)
-                {
-                    turn2Trans_2d = false;
-                    contentIndex2d++;
-                    if (contentIndex2d >= content_2d.Length)
-                    {
-                        contentIndex2d = 0;
-                    }
-                    t_2d.text = content_2d[contentIndex2d];
-                }
-            }
-            else
-            {
-                alpha2d += alphaSpeed2d * Time.deltaTime;
-                t_2d.color = new Color(color_2d.r, color_2d.g, color_2d.b, alpha2d);
-                if (alpha2d > 0.95f)
-                {
-                    currentTime2d = 0f;
-                    isShow_2d = true;
-                }
-            }
+            t_2d.color = new Color(0.78f, 0f, 0f, 1f);
         }
+        text2d.anchoredPosition = new Vector2(0, 0);
     }
 }
