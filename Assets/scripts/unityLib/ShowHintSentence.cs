@@ -10,8 +10,8 @@ public class ShowHintSentence : MonoBehaviour
 
     public static bool RefreshCaption;
 
-    string[] content_3d = new string[] { "易感人群\n传播途径\n口罩种类","居家隔离\n怀疑感染\n疫情在线咨询","学生防控\n老年人防控\n办公室防控","确诊患者车次\n确诊患者小区\n北京天气",
-                                         "美元汇率\n联通股价\n五加五等于几","今天几号\n今天农历几号\n现在几点了","静夜思的作者\n背诵静夜思\n讲一个笑话"};
+    string[] content_3d = new string[] { "易感人群\n传播途径\n口罩种类\n居家隔离\n怀疑感染\n疫情在线咨询\n学生防控\n老年人防控\n办公室防控\n确诊患者车次\n确诊患者小区",
+                                         "北京天气\n美元汇率\n联通股价\n五加五等于几\n今天几号\n今天农历几号\n现在几点了\n静夜思的作者\n背诵静夜思\n讲一个笑话"};
     string[] content_2d = new string[] { };
 
     TextMesh t_3d;
@@ -21,7 +21,7 @@ public class ShowHintSentence : MonoBehaviour
 
     float showTime3d = 3f, showTime2d = 3f;
     float currentTime3d = 0f, currentTime2d = 0f;
-    float alpha3d, alpha2d, alphaSpeed3d = 2f, speed2d = 80f;
+    float alpha3d, alpha2d, alphaSpeed3d = 2f, speed2d = 120f;
     int characterWidth = 50;//当前字号38下，每个字占位为50
 
     bool isShow_3d=true, isShow_2d=true, turn2Trans_3d, turn2Trans_2d;
@@ -44,7 +44,7 @@ public class ShowHintSentence : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Show3DText();
+        //Show3DText();
         Show2DText();
         if (RefreshCaption)
         {

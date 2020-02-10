@@ -10,6 +10,7 @@ public class HeadRoatorBone : MonoBehaviour
     public float headRotCorrection;
     public float neckRotCorrection;
 
+    public static bool doBodyAction = false;
     public static bool nodTrigger = false;
 
     bool startNod;
@@ -27,7 +28,7 @@ public class HeadRoatorBone : MonoBehaviour
     void Update()
     {
         
-        if(FaceExpression.doFaceExpression && nodTrigger)
+        if(doBodyAction && nodTrigger)
         {
             nodTrigger = false;
             startNod = true;
@@ -40,7 +41,7 @@ public class HeadRoatorBone : MonoBehaviour
 
     public void RequestHeadRotation(Dictionary<string, float> headpose)
     {
-        if (!FaceExpression.doFaceExpression)
+        if (!doBodyAction)
         {
             // New attempt bone rotation
             float multiplier_head = 0.65f;
@@ -52,7 +53,7 @@ public class HeadRoatorBone : MonoBehaviour
             jointObj_head.localRotation = Quaternion.Euler((rot * multiplier_head) + new Vector3(headRotCorrection, 0, 0));
             // +32.928f
             jointObj_neck.localRotation = Quaternion.Euler((rot * multiplier_neck) + new Vector3(neckRotCorrection, 0, 0));
-            //Debug.Log("sfy111 neck rot:"+jointObj_neck.localRotation);
+            Debug.Log("sfy111 neck rot:"+jointObj_neck.localRotation);
 
         }
     }
@@ -84,7 +85,7 @@ public class HeadRoatorBone : MonoBehaviour
         }
         else
         {
-            FaceExpression.doFaceExpression = false;
+            doBodyAction = false;
             ResetNod();
             jointObj_head.localRotation = Quaternion.Euler(0f, 0f, 0f);
         }

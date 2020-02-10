@@ -11,7 +11,7 @@ public class ShowDanMu : MonoBehaviour
     public Sprite danmuClose;
 
     private string[] content = { "说“搞怪”或者戳我鼻子", "说“哭一个”或者向下拉我的嘴角", "说“笑一个”或者向上拉我的嘴角",
-        "戳我眼睛", "左右滑动可以改变视角哦" };
+        "戳我眼睛", "左右滑动可以改变视角哦", "说“点头”或者戳我额头" };
     private RectTransform[] danmu_text;
     private float showWaitTime, currentWaitTime;
     private bool[] danmuMove;

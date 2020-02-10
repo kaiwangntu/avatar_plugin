@@ -31,7 +31,14 @@ public class AndroidCallUnityLib : MonoBehaviour
 
     public void DoFaceExpression(string flag)
     {
-        FaceExpression.doFaceExpression = true;
+        if (flag.Equals("face"))
+        {
+            FaceExpression.doFaceExpression = true;
+        }
+        else if(flag.Equals("body"))
+        {
+            HeadRoatorBone.doBodyAction = true;
+        }
     }
 
     public void AvatarCry(string flag)

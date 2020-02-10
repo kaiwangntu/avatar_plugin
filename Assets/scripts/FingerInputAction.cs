@@ -53,7 +53,7 @@ public class FingerInputAction : MonoBehaviour
                     {
                         if (!camRotate)
                         {
-                            if (Mathf.Abs(Input.touches[0].position.x - originTapPos.x) < 50f || (Mathf.Abs(Input.touches[0].position.x-originTapPos.x)>=50f&&Mathf.Abs(Input.touches[0].position.y-originTapPos.y)>80f))
+                            if (Mathf.Abs(Input.touches[0].position.x - originTapPos.x) < 50f)
                             {
                                 //Debug.Log("sfy111 mouth move");
                                 //Debug.Log("sfy111 x:" + Mathf.Abs(Input.touches[0].position.x - originTapPos.x) + ",y:" + Mathf.Abs(Input.touches[0].position.y - originTapPos.y));
@@ -183,7 +183,14 @@ public class FingerInputAction : MonoBehaviour
         if (waitDoubleTapTime > 0.3f)
         {
             Debug.Log("unity single tap");
-            FaceExpression.doFaceExpression = true;
+            if (HeadRoatorBone.nodTrigger)
+            {
+                HeadRoatorBone.doBodyAction = true;
+            }
+            else
+            {
+                FaceExpression.doFaceExpression = true;
+            }
             startWaitDoubleTap = false;
             waitDoubleTapTime = 0f;
         }
