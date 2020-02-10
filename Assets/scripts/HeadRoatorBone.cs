@@ -53,7 +53,7 @@ public class HeadRoatorBone : MonoBehaviour
             jointObj_head.localRotation = Quaternion.Euler((rot * multiplier_head) + new Vector3(headRotCorrection, 0, 0));
             // +32.928f
             jointObj_neck.localRotation = Quaternion.Euler((rot * multiplier_neck) + new Vector3(neckRotCorrection, 0, 0));
-            Debug.Log("sfy111 neck rot:"+jointObj_neck.localRotation);
+            //Debug.Log("sfy111 neck rot:"+jointObj_neck.localRotation);
 
         }
     }

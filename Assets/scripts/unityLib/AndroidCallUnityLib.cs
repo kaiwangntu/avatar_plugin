@@ -29,7 +29,7 @@ public class AndroidCallUnityLib : MonoBehaviour
         }
     }
 
-    public void DoFaceExpression(string flag)
+    public void DoHumanAction(string flag)
     {
         if (flag.Equals("face"))
         {
