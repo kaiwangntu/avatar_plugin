@@ -243,14 +243,14 @@ public class FingerInputAction : MonoBehaviour
             }
             if (target >= 0)
             {
-                if (Mathf.Abs(avatar.eulerAngles.y - target) < 0.3f)
+                if (Mathf.Abs(avatar.eulerAngles.y - target) < rotSpeed*Time.deltaTime)
                 {
                     avatarStartRotate = false;
                 }
             }
             else
             {
-                if (Mathf.Abs(avatar.eulerAngles.y - 360f - target) < 0.3f)
+                if (Mathf.Abs(avatar.eulerAngles.y - 360f - target) < rotSpeed*Time.deltaTime)
                 {
                     avatarStartRotate = false;
                 }
