@@ -40,7 +40,7 @@ public class ShowDanMu : MonoBehaviour
             danmu_text[i].gameObject.AddComponent<Text>();
             Text text = danmu_text[i].gameObject.GetComponent<Text>();
             text.text = content[i];
-            text.color = new Color(1, 1, 1, 1);
+            text.color = new Color(1, 0.9f, 0, 1);
             text.fontSize = Random.Range(35, 45);
             text.fontStyle = FontStyle.Normal;
             text.alignment = TextAnchor.MiddleLeft;
