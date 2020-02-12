@@ -80,13 +80,13 @@ public class AndroidCallUnityLib : MonoBehaviour
         {
             AvatarSpeaking.isAvatarSpeaking = true;
             AvatarSpeaking.audioClipCount = 0;
-            //Debug.Log("sfy111 start talking");
+            Debug.Log("sfy111 start talking");
         }
         else
         {
             AvatarSpeaking.isAvatarSpeaking = false;
-            unityListener.ClearAudioClipList();
-            //Debug.Log("sfy111 stop talking");
+            
+            Debug.Log("sfy111 stop talking");
         }
     }
 
