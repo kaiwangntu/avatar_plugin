@@ -9,9 +9,11 @@ public class ShowDanMu : MonoBehaviour
     public Button openDanmu;
     public Sprite danmuOpen;
     public Sprite danmuClose;
+    public Transform danmuParent;
 
     private string[] content = { "说“搞怪”或者戳我鼻子", "说“哭一个”或者向下拉我的嘴角", "说“笑一个”或者向上拉我的嘴角",
         "戳我眼睛", "左右滑动可以改变视角哦", "说“点头”或者戳我额头" };
+    private string[] faceSyncContent = {"前置相机已打开","眨眼试试","点点头吧", "前置相机已打开", "眨眼试试", "点点头吧", "前置相机已打开", "眨眼试试", "点点头吧" };
     private RectTransform[] danmu_text;
     private float showWaitTime, currentWaitTime;
     private bool[] danmuMove;
@@ -19,37 +21,14 @@ public class ShowDanMu : MonoBehaviour
     private float[] speed;
     private bool isDanmuOpen = true;
     private int characterWidth = 50;
+    private bool isFaceSyncDanmu = false;
 
     public static bool LaughExecuted, CryExecuted, FunnyExecuted, BlinkExecuted, CamRotateExecuted;
 
     // Start is called before the first frame update
     void Start()
     {
-        danmu_text = new RectTransform[content.Length];
-        for (int i = 0; i < content.Length; i++)
-        {
-            GameObject danmuObj = new GameObject("danmu", typeof(RectTransform));
-            danmuObj.transform.SetParent(this.gameObject.transform);
-            danmu_text[i] = danmuObj.GetComponent<RectTransform>();
-            danmu_text[i].sizeDelta = new Vector2(content[i].Length * characterWidth, 100);
-            danmu_text[i].pivot = new Vector2(0, 1);
-            danmu_text[i].anchorMax = new Vector2(1, 1);
-            danmu_text[i].anchorMin = new Vector2(1, 1);
-            danmu_text[i].anchoredPosition = new Vector2(0, 0);
-
-            danmu_text[i].gameObject.AddComponent<Text>();
-            Text text = danmu_text[i].gameObject.GetComponent<Text>();
-            text.text = content[i];
-            text.color = new Color(1, 0.9f, 0, 1);
-            text.fontSize = Random.Range(35, 45);
-            text.fontStyle = FontStyle.Normal;
-            text.alignment = TextAnchor.MiddleLeft;
-            text.font = font;
-        }
-        danmuMove = new bool[content.Length];
-        height = new int[content.Length];
-        speed = new float[content.Length];
-        showWaitTime = Random.Range(3f, 5f);
+        InitFaceExpressionDanmu();
 
         openDanmu.onClick.AddListener(delegate
         {
@@ -73,25 +52,101 @@ public class ShowDanMu : MonoBehaviour
     {
         if (isDanmuOpen)
         {
-            if (currentWaitTime > showWaitTime)
+            if (!isFaceSyncDanmu)
             {
-                int danmuIndex = Random.Range(0, content.Length);
-                //if (CheckIfDanMuShouldShow(danmuIndex) && !danmuMove[danmuIndex])
-                if(!danmuMove[danmuIndex])
-                {
-                    speed[danmuIndex] = Random.Range(100f, 130f);
-                    height[danmuIndex] = Random.Range(2, 10);
-                    danmuMove[danmuIndex] = true;
-                    showWaitTime = Random.Range(7f, 10f);
-                    currentWaitTime = 0f;
-                }
+                RandomDanmu(content, 7f, 10f);
             }
+            else
+            {
+                RandomDanmu(faceSyncContent, 1f, 3f);
+            }
+            
 
             //if (!AllDanMuStop())
             //{
-                currentWaitTime += Time.deltaTime;
+            currentWaitTime += Time.deltaTime;
                 DanMuMove(height, speed);
             //}
+        }
+    }
+
+    public void SetIsFaceSyncDanmu(bool flag)
+    {
+        isFaceSyncDanmu = flag;
+    }
+
+    public void InitFaceExpressionDanmu()
+    {
+        danmu_text = new RectTransform[content.Length];
+        for (int i = 0; i < content.Length; i++)
+        {
+            GameObject danmuObj = new GameObject("danmu", typeof(RectTransform));
+            danmuObj.transform.SetParent(danmuParent);
+            danmu_text[i] = danmuObj.GetComponent<RectTransform>();
+            danmu_text[i].sizeDelta = new Vector2(content[i].Length * characterWidth, 100);
+            danmu_text[i].pivot = new Vector2(0, 1);
+            danmu_text[i].anchorMax = new Vector2(1, 1);
+            danmu_text[i].anchorMin = new Vector2(1, 1);
+            danmu_text[i].anchoredPosition = new Vector2(0, 0);
+
+            danmu_text[i].gameObject.AddComponent<Text>();
+            Text text = danmu_text[i].gameObject.GetComponent<Text>();
+            text.text = content[i];
+            text.color = new Color(1, 0.9f, 0, 1);
+            text.fontSize = Random.Range(35, 45);
+            text.fontStyle = FontStyle.Normal;
+            text.alignment = TextAnchor.MiddleLeft;
+            text.font = font;
+        }
+        danmuMove = new bool[content.Length];
+        height = new int[content.Length];
+        speed = new float[content.Length];
+        showWaitTime = Random.Range(1f, 3f);
+    }
+
+    public void InitFaceSyncDanmu()
+    {
+        danmu_text = new RectTransform[faceSyncContent.Length];
+        for (int i = 0; i < faceSyncContent.Length; i++)
+        {
+            GameObject danmuObj = new GameObject("danmu", typeof(RectTransform));
+            danmuObj.transform.SetParent(danmuParent);
+            danmu_text[i] = danmuObj.GetComponent<RectTransform>();
+            danmu_text[i].sizeDelta = new Vector2(faceSyncContent[i].Length * characterWidth, 100);
+            danmu_text[i].pivot = new Vector2(0, 1);
+            danmu_text[i].anchorMax = new Vector2(1, 1);
+            danmu_text[i].anchorMin = new Vector2(1, 1);
+            danmu_text[i].anchoredPosition = new Vector2(0, 0);
+
+            danmu_text[i].gameObject.AddComponent<Text>();
+            Text text = danmu_text[i].gameObject.GetComponent<Text>();
+            text.text = faceSyncContent[i];
+            text.color = new Color(1, 0.9f, 0, 1);
+            text.fontSize = Random.Range(35, 45);
+            text.fontStyle = FontStyle.Normal;
+            text.alignment = TextAnchor.MiddleLeft;
+            text.font = font;
+        }
+        danmuMove = new bool[faceSyncContent.Length];
+        height = new int[faceSyncContent.Length];
+        speed = new float[faceSyncContent.Length];
+        showWaitTime = 0f;
+    }
+
+    void RandomDanmu(string[] content, float minWaitTime, float maxWaitTime)
+    {
+        if (currentWaitTime > showWaitTime)
+        {
+            int danmuIndex = Random.Range(0, content.Length);
+            //if (CheckIfDanMuShouldShow(danmuIndex) && !danmuMove[danmuIndex])
+            if (!danmuMove[danmuIndex])
+            {
+                speed[danmuIndex] = Random.Range(100f, 130f);
+                height[danmuIndex] = Random.Range(2, 10);
+                danmuMove[danmuIndex] = true;
+                showWaitTime = Random.Range(minWaitTime, maxWaitTime);
+                currentWaitTime = 0f;
+            }
         }
     }
 
@@ -113,7 +168,7 @@ public class ShowDanMu : MonoBehaviour
         }
     }
 
-    void DanMuReset()
+    public void DanMuReset()
     {
         for(int i = 0; i < danmu_text.Length; i++)
         {
@@ -122,6 +177,12 @@ public class ShowDanMu : MonoBehaviour
             currentWaitTime = 0f;
             showWaitTime = 0f;
         }
+    }
+
+    public void OpenDanMu()
+    {
+        isDanmuOpen = true;
+        openDanmu.GetComponent<Image>().sprite = danmuOpen;
     }
 
     bool CheckIfDanMuShouldShow(int danmuIndex)

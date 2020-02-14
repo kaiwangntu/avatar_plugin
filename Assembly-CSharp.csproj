@@ -92,6 +92,7 @@
     <Compile Include="Assets\scripts\unityLib\action_unitylib.cs" />
     <Compile Include="Assets\scripts\unityLib\AndroidCallUnityLib.cs" />
     <Compile Include="Assets\scripts\unityLib\AvatarSpeaking.cs" />
+    <Compile Include="Assets\scripts\unityLib\FaceActionSync.cs" />
     <Compile Include="Assets\scripts\unityLib\ShowDanMu.cs" />
     <Compile Include="Assets\scripts\unityLib\ShowHintSentence.cs" />
     <Compile Include="Assets\scripts\unityLib\TapPosHint.cs" />

@@ -293,20 +293,31 @@ public class action_unitylib : MonoBehaviour
             float blend_val = pair.Value;
             if (blend_val > 1.0f) blend_val = 1.0f;
             //Debug.Log("sfy face expression:"+FaceExpression.doFaceExpression);
-            if (FaceExpression.doFaceExpression)
+            if (!FaceActionSync.FACE_SYNC)
             {
-                if (blendDict[pair.Key] == 48 || blendDict[pair.Key] == 49)
+                if (FaceExpression.doFaceExpression)
+                {
+                    //if (blendDict[pair.Key] == 48 || blendDict[pair.Key] == 49)
+                    //{
+                    //    m_skinnedMeshRenderer.SetBlendShapeWeight(blendDict[pair.Key], blend_val * 100.0f);
+                    //}
+                }
+                else
                 {
                     m_skinnedMeshRenderer.SetBlendShapeWeight(blendDict[pair.Key], blend_val * 100.0f);
                 }
             }
-            else
-            {
-                m_skinnedMeshRenderer.SetBlendShapeWeight(blendDict[pair.Key], blend_val * 100.0f);
-            }
         }
 
         //yield return null;
+    }
+
+    public void ResetBlendshape()
+    {
+        for(int i=0;i< blendShapeCount; i++)
+        {
+            m_skinnedMeshRenderer.SetBlendShapeWeight(i, 0f);
+        }
     }
 
 }

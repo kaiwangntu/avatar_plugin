@@ -14,9 +14,9 @@ public class FaceExpression: MonoBehaviour
     private string cry_url = Application.streamingAssetsPath + "/cry.wav";
     private string laugh_url = Application.streamingAssetsPath + "/laugh.wav";
 
-    public static bool cryTrigger, laughTrigger, funnyTrigger, blinkTrigger, blinkEyeRight;
+    public static bool cryTrigger, laughTrigger, funnyTrigger, blinkTrigger, blinkEyeRight, blinkSyncTrigger;
 
-    bool startCry, startLaugh, startFunny, startBlink;
+    bool startCry, startLaugh, startFunny, startBlink, startBlinkSync;
 
     int blendshapeCount;
 
@@ -53,7 +53,7 @@ public class FaceExpression: MonoBehaviour
         if (doFaceExpression && (cryTrigger||Input.GetKeyDown(KeyCode.Alpha1)))
         {
             //cry
-            ShowDanMu.CryExecuted = true;
+            //ShowDanMu.CryExecuted = true;
             cryTrigger = false;
             ResetExpression();
             ResetCry();
@@ -64,7 +64,7 @@ public class FaceExpression: MonoBehaviour
         else if(doFaceExpression &&(laughTrigger || Input.GetKeyDown(KeyCode.Alpha2)))
         {
             //laugh
-            ShowDanMu.LaughExecuted = true;
+            //ShowDanMu.LaughExecuted = true;
             laughTrigger = false;
             ResetExpression();
             ResetLaugh();
@@ -75,7 +75,7 @@ public class FaceExpression: MonoBehaviour
         else if(doFaceExpression &&(funnyTrigger || Input.GetKeyDown(KeyCode.Alpha3)))
         {
             //funny face
-            ShowDanMu.FunnyExecuted = true;
+            //ShowDanMu.FunnyExecuted = true;
             funnyTrigger = false;
             ResetExpression();
             ResetFunny();
@@ -84,12 +84,21 @@ public class FaceExpression: MonoBehaviour
         }
         else if(doFaceExpression && blinkTrigger)
         {
-            ShowDanMu.BlinkExecuted = true;
+            //ShowDanMu.BlinkExecuted = true;
             blinkTrigger = false;
             ResetExpression();
             ResetBlink();
             audioSource.clip = null;
             startBlink = true;
+        }
+        else if(doFaceExpression && blinkSyncTrigger)
+        {
+            Debug.Log("sfy222test:"+blinkSyncTrigger);
+            blinkSyncTrigger = false;
+            ResetExpression();
+            ResetBlink();
+            audioSource.clip = null;
+            startBlinkSync = true;
         }
 
         if (startCry)
@@ -106,7 +115,10 @@ public class FaceExpression: MonoBehaviour
         }
         else if (startBlink)
         {
-            EyeBlink(blinkEyeRight);
+            EyeBlink(blinkEyeRight, 3, 0);
+        }else if (startBlinkSync)
+        {
+            EyeBlink(blinkEyeRight, 3, 1);
         }
     }
 
@@ -314,10 +326,10 @@ public class FaceExpression: MonoBehaviour
         }
     }
 
-    void EyeBlink(bool isRightEye)
+    void EyeBlink(bool isRightEye, int blinkTimes, int mode)
     {
-        //Debug.Log("sfyeye blinkCount:"+blinkCount);
-        if (blinkCount < 3)
+       //Debug.Log("sfyeye blinkCount:"+blinkCount);
+        if (blinkCount < blinkTimes)
         {
             if (eye_open)
             {
@@ -327,13 +339,21 @@ public class FaceExpression: MonoBehaviour
             {
                 eye_blink = Mathf.Lerp(eye_blink, 0f, 30f * Time.deltaTime);
             }
-            if (isRightEye)
+            if (mode == 1) //mode=1 同步表情时两只眼睛都眨
             {
                 m_skinnedMeshRenderer.SetBlendShapeWeight(48, eye_blink);//R
-            }
-            else
-            {
                 m_skinnedMeshRenderer.SetBlendShapeWeight(49, eye_blink);//L
+            }
+            else //mode=0 语音或者手势控制时只眨一只眼
+            {
+                if (isRightEye)
+                {
+                    m_skinnedMeshRenderer.SetBlendShapeWeight(48, eye_blink);//R
+                }
+                else
+                {
+                    m_skinnedMeshRenderer.SetBlendShapeWeight(49, eye_blink);//L
+                }
             }
             if (100f - eye_blink < 1f)
             {
@@ -396,6 +416,7 @@ public class FaceExpression: MonoBehaviour
         startLaugh = false;
         startFunny = false;
         startBlink = false;
+        startBlinkSync = false;
         for(int i = 0; i < blendshapeCount; i++)
         {
             m_skinnedMeshRenderer.SetBlendShapeWeight(i, 0f);

@@ -11,9 +11,9 @@ public class HeadRoatorBone : MonoBehaviour
     public float neckRotCorrection;
 
     public static bool doBodyAction = false;
-    public static bool nodTrigger = false;
+    public static bool nodTrigger, nodSyncTrigger;
 
-    bool startNod;
+    bool startNod, startNodSync;
     float nodAngle = 0f;
     int nodCount = 0;
     bool head_nod = true;
@@ -31,11 +31,21 @@ public class HeadRoatorBone : MonoBehaviour
         if(doBodyAction && nodTrigger)
         {
             nodTrigger = false;
+            ResetNod();
             startNod = true;
+        }else if(doBodyAction && nodSyncTrigger)
+        {
+            nodSyncTrigger = false;
+            ResetNod();
+            startNodSync = true;
         }
+
         if (startNod)
         {
-            HeadNod();
+            HeadNod(4);
+        }else if (startNodSync)
+        {
+            HeadNod(1);
         }
     }
 
@@ -58,9 +68,9 @@ public class HeadRoatorBone : MonoBehaviour
         }
     }
 
-    void HeadNod()
+    void HeadNod(int nodTimes)
     {
-        if (nodCount < 4)
+        if (nodCount < nodTimes)
         {
             if (head_nod)
             {
@@ -87,14 +97,15 @@ public class HeadRoatorBone : MonoBehaviour
         {
             doBodyAction = false;
             ResetNod();
-            jointObj_head.localRotation = Quaternion.Euler(0f, 0f, 0f);
         }
     }
 
     void ResetNod()
     {
         startNod = false;
+        startNodSync = false;
         nodCount = 0;
         head_nod = true;
+        jointObj_head.localRotation = Quaternion.Euler(0f, 0f, 0f);
     }
 }

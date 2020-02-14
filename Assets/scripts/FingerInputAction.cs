@@ -187,7 +187,7 @@ public class FingerInputAction : MonoBehaviour
             {
                 HeadRoatorBone.doBodyAction = true;
             }
-            else
+            else if(FaceExpression.funnyTrigger || FaceExpression.blinkTrigger)
             {
                 FaceExpression.doFaceExpression = true;
             }
