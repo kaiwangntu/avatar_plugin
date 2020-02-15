@@ -132,8 +132,12 @@ public class AndroidCallUnityLib : MonoBehaviour
                     FaceExpression.doFaceExpression = true;
                     break;
                 case "mouth_open":
+                    FaceExpression.mouthOpenSyncTrigger = true;
+                    FaceExpression.doFaceExpression = true;
                     break;
                 case "brow_jump":
+                    FaceExpression.browJumpSyncTrigger = true;
+                    FaceExpression.doFaceExpression = true;
                     break;
             }
         }
@@ -142,6 +146,8 @@ public class AndroidCallUnityLib : MonoBehaviour
             switch (flag)
             {
                 case "head_yaw":
+                    HeadRoatorBone.shakeSyncTrigger = true;
+                    HeadRoatorBone.doBodyAction = true;
                     break;
                 case "head_pitch":
                     HeadRoatorBone.nodSyncTrigger = true;

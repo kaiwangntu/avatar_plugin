@@ -11,11 +11,12 @@ public class HeadRoatorBone : MonoBehaviour
     public float neckRotCorrection;
 
     public static bool doBodyAction = false;
-    public static bool nodTrigger, nodSyncTrigger;
+    public static bool nodTrigger, nodSyncTrigger, shakeSyncTrigger;
 
-    bool startNod, startNodSync;
-    float nodAngle = 0f;
-    int nodCount = 0;
+    bool startNod, startNodSync, startShake, startShakeSync;
+    float shakeTarget = 0f;
+    float nodAngle = 0f, shakeAngle = 0f;
+    int nodCount = 0, shakeCount = 0;
     bool head_nod = true;
 
     // Start is called before the first frame update
@@ -39,13 +40,25 @@ public class HeadRoatorBone : MonoBehaviour
             ResetNod();
             startNodSync = true;
         }
+        else if(doBodyAction && shakeSyncTrigger)
+        {
+            shakeSyncTrigger = false;
+            ResetShake();
+            shakeTarget = -7f;
+            startShakeSync = true;
+        }
 
         if (startNod)
         {
             HeadNod(4);
-        }else if (startNodSync)
+        }
+        else if (startNodSync)
         {
             HeadNod(1);
+        }
+        else if (startShakeSync)
+        {
+            HeadShake(2);
         }
     }
 
@@ -100,12 +113,58 @@ public class HeadRoatorBone : MonoBehaviour
         }
     }
 
+    void HeadShake(int shakeTimes)
+    {
+        if (shakeCount < shakeTimes)
+        {
+            shakeAngle = Mathf.Lerp(shakeAngle, shakeTarget, 10f * Time.deltaTime);
+
+            jointObj_head.localRotation = Quaternion.Euler(shakeAngle, 0f, 0f);
+
+            if (shakeAngle < -6f)
+            {
+                shakeTarget = 7f;
+            }
+            if (shakeAngle > 6f)
+            {
+                if (shakeCount == shakeTimes - 1)
+                {
+                    shakeTarget = 0f;
+                }
+                else
+                {
+                    shakeTarget = -7f;
+                    shakeCount++;
+                }
+            }
+            if(shakeCount == shakeTimes-1 && shakeAngle < 1f && shakeTarget==0f)
+            {
+                shakeCount++;
+            }
+        }
+        else
+        {
+            doBodyAction = false;
+            ResetShake();
+        }
+    }
+
     void ResetNod()
     {
         startNod = false;
         startNodSync = false;
         nodCount = 0;
         head_nod = true;
+        nodAngle = 0f;
+        jointObj_head.localRotation = Quaternion.Euler(0f, 0f, 0f);
+    }
+
+    void ResetShake()
+    {
+        startShake = false;
+        startShakeSync = false;
+        shakeCount = 0;
+        shakeAngle = 0f;
         jointObj_head.localRotation = Quaternion.Euler(0f, 0f, 0f);
     }
 }

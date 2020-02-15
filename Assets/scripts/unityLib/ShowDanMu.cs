@@ -13,7 +13,7 @@ public class ShowDanMu : MonoBehaviour
 
     private string[] content = { "说“搞怪”或者戳我鼻子", "说“哭一个”或者向下拉我的嘴角", "说“笑一个”或者向上拉我的嘴角",
         "戳我眼睛", "左右滑动可以改变视角哦", "说“点头”或者戳我额头" };
-    private string[] faceSyncContent = {"前置相机已打开","眨眼试试","点点头吧", "前置相机已打开", "眨眼试试", "点点头吧", "前置相机已打开", "眨眼试试", "点点头吧" };
+    private string[] faceSyncContent = {"前置相机已打开","眨眼试试","点点头吧","摇摇头","挑眉试试","张张嘴", "前置相机已打开", "眨眼试试", "点点头吧", "摇摇头", "挑眉试试", "张张嘴"};
     private RectTransform[] danmu_text;
     private float showWaitTime, currentWaitTime;
     private bool[] danmuMove;
@@ -54,11 +54,11 @@ public class ShowDanMu : MonoBehaviour
         {
             if (!isFaceSyncDanmu)
             {
-                RandomDanmu(content, 7f, 10f);
+                RandomDanmu(7f, 10f);
             }
             else
             {
-                RandomDanmu(faceSyncContent, 1f, 3f);
+                RandomDanmuFaceSync(2.5f, 4f);
             }
             
 
@@ -133,11 +133,36 @@ public class ShowDanMu : MonoBehaviour
         showWaitTime = 0f;
     }
 
-    void RandomDanmu(string[] content, float minWaitTime, float maxWaitTime)
+    void RandomDanmu(float minWaitTime, float maxWaitTime)
     {
         if (currentWaitTime > showWaitTime)
         {
             int danmuIndex = Random.Range(0, content.Length);
+            //if (CheckIfDanMuShouldShow(danmuIndex) && !danmuMove[danmuIndex])
+            if (!danmuMove[danmuIndex])
+            {
+                speed[danmuIndex] = Random.Range(100f, 130f);
+                height[danmuIndex] = Random.Range(2, 10);
+                danmuMove[danmuIndex] = true;
+                showWaitTime = Random.Range(minWaitTime, maxWaitTime);
+                currentWaitTime = 0f;
+            }
+        }
+    }
+
+    void RandomDanmuFaceSync(float minWaitTime, float maxWaitTime)
+    {
+        if (currentWaitTime > showWaitTime)
+        {
+            int danmuIndex = 0;
+            for(int i = 0; i < faceSyncContent.Length; i++)
+            {
+                if (!danmuMove[i])
+                {
+                    danmuIndex = i;
+                    break;
+                }
+            }
             //if (CheckIfDanMuShouldShow(danmuIndex) && !danmuMove[danmuIndex])
             if (!danmuMove[danmuIndex])
             {

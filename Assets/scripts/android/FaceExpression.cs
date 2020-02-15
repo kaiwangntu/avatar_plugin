@@ -15,8 +15,9 @@ public class FaceExpression: MonoBehaviour
     private string laugh_url = Application.streamingAssetsPath + "/laugh.wav";
 
     public static bool cryTrigger, laughTrigger, funnyTrigger, blinkTrigger, blinkEyeRight, blinkSyncTrigger;
+    public static bool browJumpSyncTrigger, mouthOpenSyncTrigger;
 
-    bool startCry, startLaugh, startFunny, startBlink, startBlinkSync;
+    bool startCry, startLaugh, startFunny, startBlink, startBlinkSync, startBrowJumpSync, startMouthOpenSync;
 
     int blendshapeCount;
 
@@ -37,6 +38,17 @@ public class FaceExpression: MonoBehaviour
     float eye_blink;
     bool eye_open = true;
     int blinkCount = 0;
+
+    //brow jump variable
+    float browU_RL, browU_C;
+    int browJumpCount = 0;
+    bool brow_jump = false;
+
+    //
+    float jawDown_mouth;
+    int mouthOpenCount = 0;
+    bool mouth_open = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -93,12 +105,27 @@ public class FaceExpression: MonoBehaviour
         }
         else if(doFaceExpression && blinkSyncTrigger)
         {
-            Debug.Log("sfy222test:"+blinkSyncTrigger);
             blinkSyncTrigger = false;
             ResetExpression();
             ResetBlink();
             audioSource.clip = null;
             startBlinkSync = true;
+        }
+        else if(doFaceExpression && browJumpSyncTrigger)
+        {
+            browJumpSyncTrigger = false;
+            ResetExpression();
+            ResetBrowJump();
+            audioSource.clip = null;
+            startBrowJumpSync = true;
+        }
+        else if(doFaceExpression && mouthOpenSyncTrigger)
+        {
+            mouthOpenSyncTrigger = false;
+            ResetExpression();
+            ResetMouthOpen();
+            audioSource.clip = null;
+            startMouthOpenSync = true;
         }
 
         if (startCry)
@@ -116,9 +143,18 @@ public class FaceExpression: MonoBehaviour
         else if (startBlink)
         {
             EyeBlink(blinkEyeRight, 3, 0);
-        }else if (startBlinkSync)
+        }
+        else if (startBlinkSync)
         {
             EyeBlink(blinkEyeRight, 3, 1);
+        }
+        else if (startBrowJumpSync)
+        {
+            BrowJump(1);
+        }
+        else if (startMouthOpenSync)
+        {
+            MouthOpen(1);
         }
     }
 
@@ -373,6 +409,76 @@ public class FaceExpression: MonoBehaviour
         }
     }
 
+    void BrowJump(int browJumpTimes)
+    {
+        if (browJumpCount < browJumpTimes)
+        {
+            if (!brow_jump)
+            {
+                browU_RL = Mathf.Lerp(browU_RL, 100f, 25f * Time.deltaTime);
+                browU_C = Mathf.Lerp(browU_C, 80f, 20f * Time.deltaTime);
+            }
+            else
+            {
+                browU_RL = Mathf.Lerp(browU_RL, 0f, 25f * Time.deltaTime);
+                browU_C = Mathf.Lerp(browU_C, 0f, 20f * Time.deltaTime);
+            }
+
+            m_skinnedMeshRenderer.SetBlendShapeWeight(56, browU_RL);//browU_R
+            m_skinnedMeshRenderer.SetBlendShapeWeight(57, browU_RL);//browU_L
+            m_skinnedMeshRenderer.SetBlendShapeWeight(58, browU_C);//browU_C
+
+            if (100f - browU_RL < 1f)
+            {
+                brow_jump = true;
+            }
+            if (browU_RL < 1f)
+            {
+                brow_jump = false;
+                browJumpCount++;
+            }
+        }
+        else
+        {
+            doFaceExpression = false;
+            ResetBrowJump();
+            ResetExpression();
+        }
+    }
+
+    void MouthOpen(int mouthOpenTimes)
+    {
+        if (mouthOpenCount < mouthOpenTimes)
+        {
+            if (!mouth_open)
+            {
+                jawDown_mouth = Mathf.Lerp(jawDown_mouth, 40f, 10f * Time.deltaTime);
+            }
+            else
+            {
+                jawDown_mouth = Mathf.Lerp(jawDown_mouth, 0f, 10f * Time.deltaTime);
+            }
+
+            m_skinnedMeshRenderer.SetBlendShapeWeight(35, jawDown_mouth);//jaw open
+
+            if (jawDown_mouth > 39.5f)
+            {
+                mouth_open = true;
+            }
+            if (jawDown_mouth < 1f)
+            {
+                mouth_open = false;
+                mouthOpenCount++;
+            }
+        }
+        else
+        {
+            doFaceExpression = false;
+            ResetMouthOpen();
+            ResetExpression();
+        }
+    }
+
     void ResetCry()
     {
         for (int i = 0; i < cryStep.Length; i++)
@@ -410,6 +516,21 @@ public class FaceExpression: MonoBehaviour
         blinkCount = 0;
     }
 
+    void ResetBrowJump()
+    {
+        brow_jump = false;
+        browU_RL = 0f;
+        browU_C = 0f;
+        browJumpCount = 0;
+    }
+
+    void ResetMouthOpen()
+    {
+        mouth_open = false;
+        jawDown_mouth = 0f;
+        mouthOpenCount = 0;
+    }
+
     void ResetExpression()
     {
         startCry = false;
@@ -417,6 +538,8 @@ public class FaceExpression: MonoBehaviour
         startFunny = false;
         startBlink = false;
         startBlinkSync = false;
+        startBrowJumpSync = false;
+        startMouthOpenSync = false;
         for(int i = 0; i < blendshapeCount; i++)
         {
             m_skinnedMeshRenderer.SetBlendShapeWeight(i, 0f);
